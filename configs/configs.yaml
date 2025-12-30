@@ -1,0 +1,30 @@
+data:
+  data_directory: "notebooks/dataset/"
+  shuffle: true
+  batch_size: 32
+  image_size: 160
+  validation_split: 0.2
+  seed: 42
+
+train:
+  dropout: 0.2
+  loss: "binary_crossentropy"
+  optimizer: "adam"
+  metrics:
+    - "accuracy"
+  learning_rate: 0.001
+  epochs: 50
+  early_stopping: true
+  model_save_path: "artifacts/alpaca_model.keras"
+  # fine_tune: false
+  # num_fine_tune_layers: 100
+  # number_of_classes: 1
+  # target_accuracy: 0.95
+
+
+# augmentation:
+#   horizontal_flip: true
+#   rotation_range: 0.2
+#   zoom_range: 0.2
+#   contrast_range: 0.1
+#   brightness_range: 0.1
