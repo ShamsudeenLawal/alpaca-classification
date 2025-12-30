@@ -5,6 +5,7 @@ from tensorflow.keras import layers
 
 from src.exception import CustomException
 from src.logger import logging
+from src.utils.serialize import save_object
 
 # augmentation model
 def data_augmenter():
@@ -71,7 +72,7 @@ def train_model(train_dataset, test_dataset, config):
         if train_config["early_stopping"]:
             callback = keras.callbacks.EarlyStopping(
                 monitor="val_accuracy",
-                patience=5, mode="max",
+                patience=10, mode="max",
                 restore_best_weights=True
                 )
 
@@ -101,16 +102,3 @@ def train_model(train_dataset, test_dataset, config):
     except Exception as e:
         raise CustomException(e, sys)
     
-
-# if __name__ == "__main__":
-#     from src.utils.config import load_config
-#     from src.utils.serialize import save_object
-#     from src.components.ingestion import ingest_data
-#     from src.components.transformation import transform_data
-
-#     config = load_config("configs/configs.yaml")
-#     train_dataset, test_dataset = ingest_data(config)
-#     train_dataset, test_dataset = transform_data(train_dataset, test_dataset)
-#     accuracy = train_model(train_dataset, test_dataset, config)
-#     logging.info(f"Test accuracy: {accuracy}")
-#     print(f"Test accuracy: {accuracy}")
