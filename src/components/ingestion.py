@@ -1,3 +1,4 @@
+import sys
 import tensorflow as tf
 from tensorflow import keras
 
@@ -8,22 +9,22 @@ def ingest_data(config):
     try:
         logging.info("Data ingestion started...")
         train_dataset = keras.preprocessing.image_dataset_from_directory(
-            directory=config["data_directory"]
+            config["data_directory"],
             shuffle=config["shuffle"],
             batch_size=config["batch_size"],
             image_size=(config["image_size"], config["image_size"]),
             validation_split=config["validation_split"],
-            seed=config["seed"]
+            seed=config["seed"],
             subset="training"
         )
 
         validation_dataset = keras.preprocessing.image_dataset_from_directory(
-            directory=config["data_directory"]
+            directory=config["data_directory"],
             shuffle=config["shuffle"],
             batch_size=config["batch_size"],
             image_size=(config["image_size"], config["image_size"]),
             validation_split=config["validation_split"],
-            seed=config["seed"]
+            seed=config["seed"],
             subset="validation"
             
         )
