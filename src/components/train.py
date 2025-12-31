@@ -11,23 +11,21 @@ from src.utils.serialize import save_object
 def data_augmenter():
     data_augmentation = tf.keras.Sequential([
         layers.RandomFlip("horizontal"),
-        layers.RandomRotation(0.2),
-        # layers.RandomZoom(0.2),
-        # layers.RandomContrast(0.1),
-        # layers.RandomBrightness(0.1)
+        layers.RandomRotation(0.2)
     ])
 
     return data_augmentation
 
 def build_model(config):
     try:
-        logging.info("Building model started")
+        logging.info("Model building started")
         data_config = config["data"]
         train_config = config["train"]
 
         IMAGE_SIZE = data_config["image_size"]
         IMAGE_SHAPE = (IMAGE_SIZE, IMAGE_SIZE, 3)
         
+        # load components
         preprocessor = tf.keras.applications.mobilenet_v2.preprocess_input
         base_model = tf.keras.applications.MobileNetV2(
             input_shape=IMAGE_SHAPE,
@@ -37,6 +35,7 @@ def build_model(config):
         base_model.trainable = False
         data_augmentation = data_augmenter()
         
+        # assemble model
         inputs = keras.Input(shape=IMAGE_SHAPE)
         x = data_augmentation(inputs)
         x = preprocessor(x)
@@ -47,6 +46,7 @@ def build_model(config):
 
         model = keras.Model(inputs=inputs, outputs=outputs)
 
+        # compile model
         optimizer = keras.optimizers.get(train_config["optimizer"])
         optimizer.learning_rate = train_config["learning_rate"]
         loss=keras.losses.get(train_config["loss"])
@@ -56,8 +56,8 @@ def build_model(config):
             optimizer=optimizer,
             metrics=train_config["metrics"]
         )
-        logging.info("Building model completed")
-        
+        logging.info("Model building completed")
+
         return model
     
     except Exception as e:
@@ -76,7 +76,7 @@ def train_model(train_dataset, test_dataset, config):
                 restore_best_weights=True
                 )
 
-        
+        # train model        
         history = model.fit(
             train_dataset,
             epochs=train_config["epochs"],

@@ -18,5 +18,5 @@ def train(config):
 
 
 if __name__=="__main__":
-    config = config = load_config("configs/configs.yaml")
+    config = load_config("configs/configs.yaml")
     accuracy = train(config)
